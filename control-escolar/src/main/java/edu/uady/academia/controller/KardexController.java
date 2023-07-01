@@ -15,8 +15,12 @@ import org.springframework.web.bind.annotation.*;
 @Log4j2
 public class KardexController {
 
-    @Autowired
     private KardexService kardexService;
+
+    @Autowired
+    public void setKardexService(KardexService kardexService) {
+        this.kardexService = kardexService;
+    }
 
     @GetMapping
     public ResponseEntity<?> getAllKardexs() {

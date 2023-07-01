@@ -10,6 +10,7 @@ import edu.uady.academia.model.Kardex;
 import edu.uady.academia.repository.KardexRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -25,8 +26,18 @@ import java.util.UUID;
 @Log4j2
 public class KardexService {
 
-    @Autowired
     private KardexRepository kardexRepository;
+    private Environment env;
+
+    @Autowired
+    public void setKardexRepository(KardexRepository kardexRepository) {
+        this.kardexRepository = kardexRepository;
+    }
+
+    @Autowired
+    public void setEnv(Environment env) {
+        this.env = env;
+    }
 
     public Kardex createKardex(Kardex kardex){
         log.info("crea Kardex: "+kardex.toString());
@@ -36,11 +47,11 @@ public class KardexService {
     public void createKardexForAlumno(Alumno alumno) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
-        HttpEntity entity = new HttpEntity(headers);
+        HttpEntity<HttpHeaders> entity = new HttpEntity<>(headers);
 
         log.info(alumno.getLicenciaturaId());
-        ResponseEntity<LicenciaturaMateriaDTO> response = restTemplate.exchange("http://localhost:8090/sistema-academia/plan-estudios/"
-                + alumno.getLicenciaturaId(), HttpMethod.GET, entity, LicenciaturaMateriaDTO.class);
+        ResponseEntity<LicenciaturaMateriaDTO> response = restTemplate.exchange(env.getProperty("URL_COA") + alumno.getLicenciaturaId(),
+                HttpMethod.GET, entity, LicenciaturaMateriaDTO.class);
 
         LicenciaturaMateriaDTO responseMaterias = response.getBody();
         log.info("Consumo endpoint desde Control Escolar");
@@ -64,15 +75,17 @@ public class KardexService {
     }
 
     public Kardex updateKardex(Kardex kardex){
-        log.info("actualiza Kardex: "+kardex.toString());
+        log.info("Actualizar Kardex: "+kardex.toString());
         return kardexRepository.save(kardex);
     }
 
     public List<Kardex> getAllKardexs() throws Exception{
         List<Kardex> kardexes = kardexRepository.findAll();
-        if(kardexes.isEmpty()){
-            throw new ControlEscolarException("no se encontraron datos");
+
+        if (kardexes.isEmpty()) {
+            throw new ControlEscolarException("No se encontraron datos");
         }
+
         return  kardexes;
     }
 
@@ -81,23 +94,27 @@ public class KardexService {
 
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
-        HttpEntity entity = new HttpEntity(headers);
+        HttpEntity<HttpHeaders> entity = new HttpEntity<>(headers);
 
-        ResponseEntity<LicenciaturaMateriaDTO> response = restTemplate.exchange("http://localhost:8090/sistema-academia/plan-estudios/"
-                        +kardex.get(0).getAlumno().getLicenciaturaId(),
+        ResponseEntity<LicenciaturaMateriaDTO> response = restTemplate.exchange(env.getProperty("URL_COA") + kardex.get(0).getAlumno().getLicenciaturaId(),
                 HttpMethod.GET, entity, LicenciaturaMateriaDTO.class);
-        LicenciaturaMateriaDTO ResponseDto = response.getBody();
+
+        LicenciaturaMateriaDTO responseDto = response.getBody();
+
+        if (responseDto == null) {
+            throw new ControlEscolarException("No se encontraron datos");
+        }
 
         log.info("Consumo endpoint desde Control Escolar");
-        log.info(ResponseDto);
+        log.info(responseDto);
 
         KardexAlumno kardexAlumno = new KardexAlumno();
         kardexAlumno.setNombreCompleto(kardex.get(0).getAlumno().getNombre()+" "+kardex.get(0).getAlumno().getApellidos());
         kardexAlumno.setFolio(kardex.get(0).getFolioKardex());
-        kardexAlumno.setLicenciatrua(ResponseDto.getLicenciatura());
+        kardexAlumno.setLicenciatrua(responseDto.getLicenciatura());
 
         List<MateriasKardex> materiasKardexes = new ArrayList<>();
-        ResponseDto.getMaterias().forEach(dto ->{
+        responseDto.getMaterias().forEach(dto ->{
             MateriasKardex materiasKardex = new MateriasKardex();
             materiasKardex.setMateria(dto.getMateria());
             materiasKardex.setSemestre(dto.getSemestre());

@@ -2,9 +2,7 @@ package edu.uady.academia.service;
 
 import edu.uady.academia.error.ControlEscolarException;
 import edu.uady.academia.model.Alumno;
-import edu.uady.academia.model.Kardex;
 import edu.uady.academia.repository.AlumnoRepository;
-import edu.uady.academia.repository.KardexRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,17 +14,26 @@ import java.util.List;
 @Log4j2
 public class AlumnoService {
 
-    @Autowired
     private AlumnoRepository alumnoRepository;
+    private KardexService kardexService;
 
     @Autowired
-    private KardexService kardexService;
+    public void setAlumnoRepository(AlumnoRepository alumnoRepository) {
+        this.alumnoRepository = alumnoRepository;
+    }
+
+    @Autowired
+    public void setKardexServiceEnv(KardexService kardexService) {
+        this.kardexService = kardexService;
+    }
 
     public List<Alumno> getAllAlumnos() throws ControlEscolarException {
         List<Alumno> alumnos = alumnoRepository.findAll();
-        if(alumnos.isEmpty()){
+
+        if (alumnos.isEmpty()) {
             throw new ControlEscolarException("No se encontraron datos");
         }
+
         return  alumnos;
     }
 

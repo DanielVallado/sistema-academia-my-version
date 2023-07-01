@@ -15,8 +15,12 @@ import org.springframework.web.bind.annotation.*;
 @Log4j2
 public class AlumnoController {
 
-    @Autowired
     private AlumnoService alumnoService;
+
+    @Autowired
+    public void setAlumnoService(AlumnoService alumnoService) {
+        this.alumnoService = alumnoService;
+    }
 
     @GetMapping
     public ResponseEntity<?> getAllAlumnos() {
