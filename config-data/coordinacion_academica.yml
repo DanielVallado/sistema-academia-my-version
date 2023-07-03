@@ -1,6 +1,6 @@
 server:
   servlet:
-    context-path: sistema-academia
+    context-path: /sistema-academia
   port: 8090
 
 spring:
