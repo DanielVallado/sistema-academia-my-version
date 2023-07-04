@@ -1,5 +1,5 @@
 server:
-  port: ${random.int(8000, 8100)}
+  port: ${random.int(8000,8100)}
   servlet:
     context-path: /sistema-escolar
 
