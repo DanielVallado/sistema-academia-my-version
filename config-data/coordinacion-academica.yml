@@ -1,7 +1,7 @@
 server:
+  port: ${random.int(8000,8100)}
   servlet:
     context-path: /sistema-academia
-  port: 8090
 
 spring:
   datasource:
@@ -13,4 +13,11 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     generate-ddl: true
     show-sql: true
+
+eureka:
+  client:
+    fetch-registry=true: true
+    register-with-eureka=true: true
+    service-url:
+      default-zone=: http://localhost:8761/eureka
 
