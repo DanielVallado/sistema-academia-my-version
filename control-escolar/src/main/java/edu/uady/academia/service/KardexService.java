@@ -1,5 +1,6 @@
 package edu.uady.academia.service;
 
+import edu.uady.academia.client.IPlanEstudiosClient;
 import edu.uady.academia.dto.KardexAlumno;
 import edu.uady.academia.dto.MateriasKardex;
 import edu.uady.academia.dto.client.LicenciaturaMateriaDTO;
@@ -28,6 +29,7 @@ public class KardexService {
 
     private KardexRepository kardexRepository;
     private Environment env;
+    private IPlanEstudiosClient planEstudiosClient;
 
     @Autowired
     public void setKardexRepository(KardexRepository kardexRepository) {
@@ -37,6 +39,11 @@ public class KardexService {
     @Autowired
     public void setEnv(Environment env) {
         this.env = env;
+    }
+
+    @Autowired
+    public void setPlanEstudiosClient(IPlanEstudiosClient planEstudiosClient) {
+        this.planEstudiosClient = planEstudiosClient;
     }
 
     public Kardex createKardex(Kardex kardex){
@@ -96,10 +103,14 @@ public class KardexService {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<HttpHeaders> entity = new HttpEntity<>(headers);
 
-        ResponseEntity<LicenciaturaMateriaDTO> response = restTemplate.exchange(env.getProperty("URL_COA") + kardex.get(0).getAlumno().getLicenciaturaId(),
-                HttpMethod.GET, entity, LicenciaturaMateriaDTO.class);
+        log.info("OpenFeign");
+        ResponseEntity<?> response =  planEstudiosClient.findByLicenciaturaId(kardex.get(0).getAlumno().getLicenciaturaId());
 
-        LicenciaturaMateriaDTO responseDto = response.getBody();
+        /*ResponseEntity<LicenciaturaMateriaDTO> response = restTemplate.exchange(env.getProperty("URL_COA") + kardex.get(0).getAlumno().getLicenciaturaId(),
+                HttpMethod.GET, entity, LicenciaturaMateriaDTO.class);*/
+
+        LicenciaturaMateriaDTO responseDto = (LicenciaturaMateriaDTO) response.getBody();
+//        LicenciaturaMateriaDTO responseDto = response.getBody();
 
         if (responseDto == null) {
             throw new ControlEscolarException("No se encontraron datos");

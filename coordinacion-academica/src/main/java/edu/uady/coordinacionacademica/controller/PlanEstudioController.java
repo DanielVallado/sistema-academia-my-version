@@ -19,7 +19,7 @@ public class PlanEstudioController {
     private PlanEstudioService planEstudiosService;
 
     @GetMapping
-    public ResponseEntity<?> findAllPlanEstudios(){
+    public ResponseEntity<?> findAllPlanEstudios() {
         try {
             return ResponseEntity.ok().body(planEstudiosService.getAllPlanEstudios());
         }catch (COAException ex){
@@ -32,7 +32,7 @@ public class PlanEstudioController {
     }
 
     @GetMapping( ("/{licenciatura-id}"))
-    public ResponseEntity<?> findByLicenciaturaId(@PathVariable("licenciatura-id") long licenciaturaId){
+    public ResponseEntity<?> findByLicenciaturaId(@PathVariable("licenciatura-id") long licenciaturaId) {
         try {
             return ResponseEntity.ok().body(planEstudiosService.getLicenciaturaMaterias(licenciaturaId));
         }catch (COAException ex){
@@ -45,7 +45,7 @@ public class PlanEstudioController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createPlanEstudios(@RequestBody PlanEstudio planEstudio){
+    public ResponseEntity<?> createPlanEstudios(@RequestBody PlanEstudio planEstudio) {
         try {
             return new ResponseEntity<>(planEstudiosService.createPlanEstudio(planEstudio), HttpStatus.CREATED);
         }catch (COAException ex){
@@ -58,7 +58,7 @@ public class PlanEstudioController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updatePlanEstudios(@RequestBody PlanEstudio planEstudio){
+    public ResponseEntity<?> updatePlanEstudios(@RequestBody PlanEstudio planEstudio) {
         try {
             return new ResponseEntity<>(planEstudiosService.updatePlanEstudio(planEstudio), HttpStatus.CREATED);
         }catch (COAException ex){
@@ -71,7 +71,7 @@ public class PlanEstudioController {
     }
 
     @DeleteMapping("/{id}")
-    public void deletePlanEstudios(@PathVariable (value = "id") Long id){
+    public void deletePlanEstudios(@PathVariable (value = "id") Long id) {
         planEstudiosService.deletePlanEstudio(id);
     }
 
