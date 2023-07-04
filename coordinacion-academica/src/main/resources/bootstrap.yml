@@ -3,4 +3,4 @@ spring:
     config:
       uri: http://localhost:8071
   application:
-    name: coordinacion_academica
+    name: coordinacion-academica
