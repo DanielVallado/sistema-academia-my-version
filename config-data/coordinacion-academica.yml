@@ -1,9 +1,11 @@
 server:
-  port: ${random.int(8000,8100)}
+  port: ${PORT:${SERVER_PORT:0}}
   servlet:
     context-path: /coordinacion-academia
 
 spring:
+  application:
+    name: coordinacion-academica
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/sistema_academia
