@@ -1,7 +1,7 @@
 server:
   port: ${PORT:${SERVER_PORT:0}}
   servlet:
-    context-path: /coordinacion-academia
+    context-path: /coordinacion-academica
 
 spring:
   application:
