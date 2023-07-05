@@ -1,5 +1,5 @@
 server:
-  port: ${random.int(8000,8100)}
+  port: ${PORT:${SERVER_PORT:0}}
   servlet:
     context-path: /control-escolar
 
