@@ -15,6 +15,9 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+  cloud:
+    discovery:
+      enabled: true
       
 eureka:
   client:
