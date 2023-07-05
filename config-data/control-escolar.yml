@@ -4,6 +4,8 @@ server:
     context-path: /control-escolar
 
 spring:
+  application:
+    name: control-escolar
   datasource:
     url: jdbc:mysql://localhost:3306/sistema_escolar
     username: root
