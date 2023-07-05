@@ -16,7 +16,6 @@ spring:
               args:
                 name: CircuitBreaker
                 fallbackUri: forward:/error
-
         - id: get-control-escolar
           uri: lb://control-escolar
           predicates:
@@ -26,7 +25,6 @@ spring:
               args:
                 name: CircuitBreaker
                 fallbackUri: forward:/error
-
 
 server:
   port: 9070
