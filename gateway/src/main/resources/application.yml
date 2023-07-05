@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: get-coordinacion-academica
+          uri: lb://coordinacion-academica
+          predicates:
+            - Path=/coordinacion-academica/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: CircuitBreaker
+                fallbackUri: forward:/error
+
+        - id: get-control-escolar
+          uri: lb://control-escolar
+          predicates:
+            - Path=/control-escolar/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: CircuitBreaker
+                fallbackUri: forward:/error
+
+
+server:
+  port: 9070
+
+eureka:
+  client:
+    service-url:
+      default-zone: http://localhost:8761/eureka
+    fetch-registry: true
+    register-with-eureka: true
+

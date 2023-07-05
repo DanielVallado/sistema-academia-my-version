@@ -1,7 +1,7 @@
 server:
   port: ${random.int(8000,8100)}
   servlet:
-    context-path: /sistema-escolar
+    context-path: /control-escolar
 
 spring:
   datasource:
