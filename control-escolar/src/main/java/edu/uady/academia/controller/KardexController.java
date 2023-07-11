@@ -46,7 +46,7 @@ public class KardexController {
             return new ResponseEntity<>("Datos no encontrados", HttpStatus.OK);
         } catch (Exception e) {
             log.error(e);
-            throw new RuntimeException(e);
+            return new ResponseEntity<>("Datos no encontrados", HttpStatus.BAD_REQUEST);
         }
     }
 

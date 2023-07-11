@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "coordinacion-academica", path = "/plan-estudios")
+@FeignClient(name = "coordinacion-academica", path = "/coordinacion-academica/plan-estudios")
 public interface IPlanEstudiosClient {
 
     @GetMapping(value = ("/{licenciatura-id}"))

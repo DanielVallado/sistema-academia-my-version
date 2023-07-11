@@ -38,9 +38,10 @@ public class PlanEstudioController {
         }catch (COAException ex){
             log.warn("Sin datos");
             log.error(ex);
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Datos no encontrados", HttpStatus.OK);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            log.error(e);
+            return new ResponseEntity<>("Datos no encontrados", HttpStatus.BAD_REQUEST);
         }
     }
 

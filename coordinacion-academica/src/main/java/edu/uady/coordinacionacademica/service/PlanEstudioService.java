@@ -64,7 +64,10 @@ public class PlanEstudioService {
 
     public LicenciaturaMateriaDTO getLicenciaturaMaterias(Long licenciaturaId) throws Exception {
         List<PlanEstudio> planEstudios = planEstudioRepository.findPlanEstudioByLicenciatura_Id(licenciaturaId);
-        log.info(planEstudios.toString());
+
+        if (planEstudios.isEmpty()) {
+            throw new COAException("Datos no encontrados");
+        }
 
         LicenciaturaMateriaDTO dto = new LicenciaturaMateriaDTO();
         dto.setLicenciatura(planEstudios.get(0).getLicenciatura().getNombre());

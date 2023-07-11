@@ -1,0 +1,37 @@
+server:
+  port: 8091
+  servlet:
+    context-path: /pagos
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/sistema_pagos
+    username: root
+    password: TamiLala#_7
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  application:
+    name: pagos
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+  server:
+    port: 8088
+
+#  mvc:
+#    pathmatch:
+#      matching-strategy: ant_path_matcher
+
+#logging:
+#  pattern:
+#    level: "%d{yyyy-MM-dd HH:mm:ss} - %-5p - [%C{2}:%L] - %l %m%n"

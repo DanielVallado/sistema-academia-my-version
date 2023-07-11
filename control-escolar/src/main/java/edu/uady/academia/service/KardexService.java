@@ -99,25 +99,18 @@ public class KardexService {
     public KardexAlumno findByKardexByAlumno(String matricula) throws Exception {
         List<Kardex> kardex = kardexRepository.findAllByAlumno_Matricula(matricula);
 
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        HttpEntity<HttpHeaders> entity = new HttpEntity<>(headers);
+        if (kardex.isEmpty()) {
+            throw new ControlEscolarException("No se encontraron datos");
+        }
 
         log.info("OpenFeign");
         ResponseEntity<?> response =  planEstudiosClient.findByLicenciaturaId(kardex.get(0).getAlumno().getLicenciaturaId());
 
-        /*ResponseEntity<LicenciaturaMateriaDTO> response = restTemplate.exchange(env.getProperty("URL_COA") + kardex.get(0).getAlumno().getLicenciaturaId(),
-                HttpMethod.GET, entity, LicenciaturaMateriaDTO.class);*/
-
-        LicenciaturaMateriaDTO responseDto = (LicenciaturaMateriaDTO) response.getBody();
-//        LicenciaturaMateriaDTO responseDto = response.getBody();
-
-        if (responseDto == null) {
-            throw new ControlEscolarException("No se encontraron datos");
+        if (response.getBody() == null) {
+            throw new ControlEscolarException("No se encontraron materias");
         }
 
-        log.info("Consumo endpoint desde Control Escolar");
-        log.info(responseDto);
+        LicenciaturaMateriaDTO responseDto = (LicenciaturaMateriaDTO) response.getBody();
 
         KardexAlumno kardexAlumno = new KardexAlumno();
         kardexAlumno.setNombreCompleto(kardex.get(0).getAlumno().getNombre()+" "+kardex.get(0).getAlumno().getApellidos());

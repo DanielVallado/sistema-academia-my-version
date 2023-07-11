@@ -21,6 +21,7 @@ public class CostoMateriaController {
     @GetMapping
     public ResponseEntity<?> getAllCostoMaterias() {
         try {
+            log.info("getAllCostoMaterias");
             return ResponseEntity.ok().body(costoMateriaService.getAllCostoMaterias());
         } catch (COAException coaException) {
             log.warn("Sin datos");

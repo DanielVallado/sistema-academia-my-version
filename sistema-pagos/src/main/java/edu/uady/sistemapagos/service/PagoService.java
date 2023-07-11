@@ -5,7 +5,12 @@ import edu.uady.sistemapagos.model.Pago;
 import edu.uady.sistemapagos.repository.PagoRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +21,8 @@ public class PagoService {
 
     @Autowired
     private PagoRepository pagoRepository;
+
+    private RestTemplate restTemplate;
 
     public List<Pago> getAllPagos() throws Exception {
         List<Pago> pagoList = pagoRepository.findAll();
@@ -29,7 +36,23 @@ public class PagoService {
 
     public Pago createPago(Pago pago) {
         log.info("Se crea pago: " + pago.toString());
-        return pagoRepository.save(pago);
+        Pago pagoRealizado = pagoRepository.save(pago);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Basic YWRtaW46MTIzNDU2");
+        String jsonEmail = "{\n" +
+                "   \"toUser\":[\"danielvalladoorozco@gmail.com\",\n" +
+                "   \"subject\": \"Pago UADY\",\n" +
+                "   \"message\":\"Envío de email de pago "+pagoRealizado.toString()+". \"" +
+                "}";
+
+        log.info(jsonEmail);
+        HttpEntity<String> httpEntity = new HttpEntity<>(headers);
+        restTemplate = new RestTemplate();
+        ResponseEntity<String> response = restTemplate.exchange("http://localhost:6069/v1/email", HttpMethod.GET, httpEntity, String.class);
+        log.info(response.getBody());
+
+        return pagoRealizado;
     }
 
     public Pago updatePago(Pago pago) throws Exception {

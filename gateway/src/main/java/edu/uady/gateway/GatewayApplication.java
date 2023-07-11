@@ -18,7 +18,7 @@ public class GatewayApplication {
 
     @GetMapping("/error")
     public String error() {
-        return "Microservicio de UADY no disponible por el momento.";
+        return "Microservicio UADY no disponible por el momento.";
     }
 
     @Bean
